@@ -6,8 +6,11 @@ import {
   useColorModeValue,
   Input,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useProductStore } from "../store/product";
+import { set } from "mongoose";
 
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({
@@ -16,8 +19,31 @@ const CreatePage = () => {
     image: "",
   });
 
-  const handleAddProduct = () => {
-    console.log("New Product Created:", newProduct);
+  const toast = useToast();
+
+  const { createProduct } = useProductStore();
+  const handleAddProduct = async () => {
+    const { success, message } = await createProduct(newProduct);
+    console.log("Success:", success);
+    console.log("Message:", message);
+    if (!success) {
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: message,
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+    setNewProduct({ name: "", price: "", image: "" }); // Reset form after submission
   };
 
   return (
@@ -49,10 +75,10 @@ const CreatePage = () => {
               }
             />
             <Input
-              placeholder="Description"
-              value={newProduct.description}
+              placeholder="Image"
+              value={newProduct.image}
               onChange={(e) =>
-                setNewProduct({ ...newProduct, description: e.target.value })
+                setNewProduct({ ...newProduct, image: e.target.value })
               }
             />
           </VStack>
