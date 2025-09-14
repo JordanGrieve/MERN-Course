@@ -1,10 +1,23 @@
-function App() {
+import { Routes, Route } from 'react-router-dom';
+import OverviewPage from './pages/OverviewPage.jsx';
+import ProductsPage from './pages/ProductsPage.jsx';
+import Sidebar from './components/Sidebar.jsx';
 
+function App() {
   return (
-    <div className="text-yellow-300 text-4xl bg-blue-200">
-        <h1>HJDSMADIA</h1>
+    <div className="flex h-screen bg-gray-900 text-gray-100 overflow-hidden">
+      {/* Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 opacity-80" />
+        <div className="absolute inset-0 backdrop-blur-sm" />
+      </div>
+      <Sidebar />
+      <Routes>
+        <Route path="/" element={<OverviewPage />} />
+        <Route path="/products" element={<ProductsPage />} />
+      </Routes>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
