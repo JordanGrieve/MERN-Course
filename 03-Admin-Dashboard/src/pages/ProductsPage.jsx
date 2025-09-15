@@ -3,7 +3,7 @@ import StatCard from '../components/common/StatCard.jsx';
 import { motion } from 'framer-motion';
 import { AlertTriangle, DollarSign, TrendingUp, Package, Zap } from 'lucide-react';
 import CategoryDistributionChart from '../components/overview/CategoryDistributionChart.jsx';
-import ProductTable from '../components/products/ProductTable.jsx';
+import ProductsTable from '../components/products/ProductsTable.jsx';
 import SalesTrendChart from '../components/products/SalesTrendChart.jsx';
 
 const ProductsPage = () => {
@@ -25,7 +25,7 @@ const ProductsPage = () => {
           <StatCard name="Total Revenue" icons={DollarSign} value={'$543,210'} color="#EF4444" />
         </motion.div>
 
-        <ProductTable />
+        <ProductsTable />
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
