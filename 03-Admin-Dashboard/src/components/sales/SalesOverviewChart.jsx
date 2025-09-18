@@ -8,9 +8,19 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-const monthlySalesData = [
+const weeklyData = [
+  { day: 'Mon', sales: 900 },
+  { day: 'Tue', sales: 1200 },
+  { day: 'Wed', sales: 800 },
+  { day: 'Thu', sales: 1500 },
+  { day: 'Fri', sales: 1100 },
+  { day: 'Sat', sales: 1700 },
+  { day: 'Sun', sales: 1300 },
+];
+
+const monthlyData = [
   { month: 'Jan', sales: 4000 },
   { month: 'Feb', sales: 3000 },
   { month: 'Mar', sales: 5000 },
@@ -20,8 +30,37 @@ const monthlySalesData = [
   { month: 'Jul', sales: 7000 },
 ];
 
+const quarterlyData = [
+  { quarter: 'Q1', sales: 12000 },
+  { quarter: 'Q2', sales: 16000 },
+  { quarter: 'Q3', sales: 15500 },
+  { quarter: 'Q4', sales: 18000 },
+];
+
+const yearlyData = [
+  { year: '2021', sales: 52000 },
+  { year: '2022', sales: 61000 },
+  { year: '2023', sales: 68000 },
+  { year: '2024', sales: 73500 },
+  { year: '2025', sales: 70200 },
+];
+
 const SalesOverviewChart = () => {
-  const [selectTimeRange, setSelectTimeRange] = useState('This Month');
+  const [selectTimeRange, setSelectTimeRange] = useState('month');
+
+  const { data, xKey, label } = useMemo(() => {
+    switch (selectTimeRange) {
+      case 'week':
+        return { data: weeklyData, xKey: 'day', label: 'This Week' };
+      case 'quarter':
+        return { data: quarterlyData, xKey: 'quarter', label: 'This Quarter' };
+      case 'year':
+        return { data: yearlyData, xKey: 'year', label: 'This Year' };
+      case 'month':
+      default:
+        return { data: monthlyData, xKey: 'month', label: 'This Month' };
+    }
+  }, [selectTimeRange]);
 
   return (
     <motion.div
@@ -31,38 +70,39 @@ const SalesOverviewChart = () => {
       transition={{ delay: 0.3 }}
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-100 mb-4">Sales Overview</h2>
+        <h2 className="text-xl font-semibold text-gray-100">Sales Overview — {label}</h2>
+
         <select
           className="bg-gray-700 text-white rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={selectTimeRange}
-          onChange={(e) => {
-            setSelectTimeRange(e.target.value);
-          }}
+          onChange={(e) => setSelectTimeRange(e.target.value)}
         >
-          <option>This Week</option>
-          <option>This Month</option>
-          <option>This Quater</option>
-          <option>This Year</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="quarter">This Quarter</option>
+          <option value="year">This Year</option>
         </select>
       </div>
 
       <div className="w-full h-80">
         <ResponsiveContainer>
-          <AreaChart data={monthlySalesData}>
+          <AreaChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey="month" stroke="#9CA3AF" />
+            <XAxis dataKey={xKey} stroke="#9CA3AF" />
             <YAxis stroke="#9CA3AF" />
             <Tooltip
-              content={{ backgroundColor: 'rgba(31, 41, 55, 0.8)', borderColor: '#4B5563' }}
-              itemStyle={{ color: '#E5E7EB' }}
+              contentStyle={{
+                backgroundColor: 'rgba(31, 41, 55, 0.8)',
+                borderColor: '#4b5563',
+              }}
             />
             <Area
               type="monotone"
               dataKey="sales"
-              stroke="#8B5cF6"
-              fill="#8B5cF6"
+              stroke="#885CF6"
+              fill="#885CF6"
               fillOpacity={0.3}
-            ></Area>
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>
