@@ -25,6 +25,40 @@ const transactionResolvers = {
     },
     // TODO add category based transaction fetching
   },
-  Mutation: {},
+  Mutation: {
+    createTransaction: async (_, { input }, context) => {
+      try {
+        const newTransaction = new Transaction({
+          ...input,
+          userId: context.getUser()._id,
+        });
+        await newTransaction.save();
+      } catch (e) {
+        console.log('Error creating transaction:', e);
+        throw new Error(e);
+      }
+    },
+    updateTransaction: async (_, { input }) => {
+      try {
+        const updateTransaction = await Transaction.findByIdAndUpdate(input.transactionId, input, {
+          new: true,
+        });
+        return updateTransaction;
+      } catch (e) {
+        console.log('Error updating transaction:', e);
+        throw new Error(e);
+      }
+    },
+    deleteTransaction: async (_, { transactionId }) => {
+      try {
+        const deleteTransactoion = await Transaction.findByIdAndDelete(transactionId);
+        return deleteTransactoion;
+      } catch (e) {
+        console.log('Error deleting transaction:', e);
+        throw new Error(e);
+      }
+    },
+  },
+  // TODO add transaction / user relationship
 };
 export default transactionResolvers;
