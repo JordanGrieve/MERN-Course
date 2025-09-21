@@ -12,6 +12,7 @@ type Transaction {
 type Query {
     transactions: [Transaction!]
     transaction(transactionId: ID!): Transaction
+  # TODO add category based transaction fetching
 }
 type Mutation {
   createTransaction(input: CreateTransactionInput!): Transaction!
