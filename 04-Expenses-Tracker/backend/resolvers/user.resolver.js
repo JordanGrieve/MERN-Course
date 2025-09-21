@@ -72,12 +72,25 @@ const UserResolvers = {
     },
   },
   Query: {
-    users: (_, { req, res }) => {
-      return users;
+    authUser: async (_, context) => {
+      try {
+        const user = await context.getUser();
+        return user;
+      } catch (error) {
+        console.log('Error in authUser resolver:', error);
+        throw new Error(error.message);
+      }
     },
-    user: (_, { userId }) => {
-      return users.find((user) => user._id === userId);
+    user: async (_, { userId }) => {
+      try {
+        const user = await User.findById(userId);
+        return user;
+      } catch (error) {
+        console.log("error in 'user' Query:", error);
+        throw new Error(error.message);
+      }
     },
+    // TODO : add users user transaction / user relation
   },
 };
 
