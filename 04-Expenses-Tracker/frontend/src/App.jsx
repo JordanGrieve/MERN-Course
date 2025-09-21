@@ -1,7 +1,23 @@
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './components/pages/HomePage.jsx';
+import LoginPage from './components/pages/LoginPage.jsx';
+import SignUpPage from './components/pages/SignUpPage.jsx';
+import TransactionPage from './components/pages/TransactionPage.jsx';
+import NotFoundPage from './components/pages/NotFoundPage.jsx';
+import Header from './components/ui/Header.jsx';
+
 function App() {
+  const authUser = true;
   return (
     <>
-      <h1 className="text-red-500 text-5xl"> HELLO </h1>
+      {authUser && <Header />}
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/transaction/:id" element={<TransactionPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </>
   );
 }
