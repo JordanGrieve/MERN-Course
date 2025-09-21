@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useMutation } from '@apollo/client/react';
 
 const TransactionForm = () => {
+  // TODO when rellationsho is set up, we can pass userId from context or props
   const [createTransaction, { loading }] = useMutation(CREATE_TRANSACTION, {
     refetchQueries: ['GetTransactions'],
   });
