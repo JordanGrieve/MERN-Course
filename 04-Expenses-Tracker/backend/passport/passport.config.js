@@ -25,16 +25,17 @@ export const configurePassport = async () => {
       try {
         const user = await User.findOne({ username });
         if (!user) {
-          throw new Error('User does not exist');
+          throw new Error('Invalid username or password');
         }
         const validPassword = await bcrypt.compare(password, user.password);
 
         if (!validPassword) {
-          throw new Error('Incorrect password');
+          throw new Error('Invalid username or password');
         }
+
         return done(null, user);
-      } catch (e) {
-        return done(e);
+      } catch (err) {
+        return done(err);
       }
     })
   );
