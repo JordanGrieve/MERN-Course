@@ -14,7 +14,7 @@ export const CREATE_TRANSACTION = gql`
   }
 `;
 
-export const UPDATE_TRANSACTION = gql`
+export const UPDATE_TRANSACTIONS = gql`
   mutation UpdateTransaction($input: UpdateTransactionInput!) {
     updateTransaction(input: $input) {
       _id
