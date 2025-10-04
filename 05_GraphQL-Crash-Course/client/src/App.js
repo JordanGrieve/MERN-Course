@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { ApolloProvider } from "@apollo/client/react";
 import Home from "./pages/Home";
+import Project from "./pages/Project";
 import NotFound from "./pages/NotFound";
 
 // Apollo Client Setup
@@ -22,6 +23,7 @@ function App() {
           <div className="container">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/projects/:id" element={<Project />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
