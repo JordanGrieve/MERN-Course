@@ -7,6 +7,8 @@ import { useMemo } from "react";
 import { v4 as uuidV4 } from "uuid";
 import NoteList from "./NoteList.tsx";
 import { NoteLayout } from "./NoteLayout.tsx";
+import { Note } from "./Note.tsx";
+import { EditNote } from "./EditNote.tsx";
 
 export type Note = {
   id: string;
@@ -54,6 +56,21 @@ function App() {
       ];
     });
   }
+  function onUpdateNote(id: string, { tags, ...data }: NoteData) {
+    setNotes((prevNotes) => {
+      return prevNotes.map((note) => {
+        if (note.id === id) {
+          return {
+            ...note,
+            ...data,
+            tagIds: tags.map((tag) => tag.id),
+          };
+        } else {
+          return note;
+        }
+      });
+    });
+  }
 
   function addTag(tag: Tag) {
     setTags((prevTags) => [...prevTags, tag]);
@@ -77,8 +94,17 @@ function App() {
           }
         />
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-          <Route index element={<h1>Show</h1>} />
-          <Route path="edit" element={<h1>Edit</h1>} />
+          <Route index element={<Note />} />
+          <Route
+            path="edit"
+            element={
+              <EditNote
+                onSubmit={onUpdateNote}
+                onAddTag={addTag}
+                availableTags={tags}
+              />
+            }
+          />
         </Route>
         <Route path="/new" element={<h1>New</h1>} />
         <Route path="*" element={<Navigate to="/" />} />
