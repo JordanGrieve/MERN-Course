@@ -31,6 +31,8 @@ type EditTagsModalProps = {
   availableTags: Tag[];
   handleClose: () => void;
   show: boolean;
+  onDeleteTag: (id: string) => void;
+  onUpdateTag: (id: string, label: string) => void;
 };
 
 export default function NotesList({
@@ -45,14 +47,14 @@ export default function NotesList({
 
   const filterNotes = useMemo(() => {
     return notes.filter((note) => {
-      return (
-        title === "" ||
-        (note.title.toLowerCase().includes(title.toLowerCase()) &&
-          selectedTags.length === 0) ||
+      const matchesTitle =
+        title === "" || note.title.toLowerCase().includes(title.toLowerCase());
+      const matchesTags =
+        selectedTags.length === 0 ||
         selectedTags.every((tag) =>
           note.tags.some((noteTag) => noteTag.id === tag.id),
-        )
-      );
+        );
+      return matchesTitle && matchesTags;
     });
   }, [title, selectedTags, notes]);
 
