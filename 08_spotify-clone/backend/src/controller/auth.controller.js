@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 
-export const authCallBack = async (req, res) => {
+export const authCallBack = async (req, res, next) => {
   try {
     const { id, firstName, lastName, imageUrl } = req.body;
 
@@ -17,6 +17,6 @@ export const authCallBack = async (req, res) => {
       res.status(200).json({ message: "User signed up successfully" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 };
