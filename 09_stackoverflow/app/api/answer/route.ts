@@ -34,3 +34,33 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { answerId } = await request.json();
+
+    // Fetch the answer to get the authorId
+    const answer = await databases.getDocument(db, answerCollection, answerId);
+
+    // Delete the answer
+    const response = await databases.deleteDocument(
+      db,
+      answerCollection,
+      answerId
+    );
+
+    // Decrease author reputation by 1 point
+    const prefs = await users.getPrefs<UserPrefs>(answer.authorId);
+    await users.updatePrefs(answer.authorId, {
+      ...prefs,
+      reputation: Number(prefs.reputation) - 1,
+    });
+
+    return NextResponse.json({
+      message: "Answer deleted successfully",
+      data: response,
+    });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
